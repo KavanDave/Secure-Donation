@@ -1,0 +1,163 @@
+<html lang="en">
+	<head>
+        <style>
+            tr,th,td{
+                padding: 10px;
+            }
+
+        </style>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	</head>
+    <body> 
+		
+		<div class="row mt-5">
+			<div class="col-xl-4 col-lg-4 col-md-3 col-sm-12 text-center"></div>
+			<div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 text-center">
+				<h2>Charity Donation</h2><br>
+            <input type="text" class="form-control" id="id" autofocus required placeholder="Record Id">
+         
+            <table style="margin: 50px;">
+                <tr>
+                   <th>Name:</th>
+                   <td id="name"></td>
+                  
+                    
+                </tr>
+                <tr>
+                    <th>Number:</th>
+                    <td id="number"></td>
+                    
+                </tr>
+                <tr>
+                    <th>Amount:</th>
+                    <td id="amount"></td>
+                </tr>
+                <tr>
+                    <th>Total Records:</th>
+                    <td id="totalrecord"></td>
+                 </tr>
+            </table>
+            <button id="records" class="btn btn-sm bg-amr btn-primary mt-3 ">Show Records</button>
+			</div>
+    	</div>
+		
+		<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.36/dist/web3.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
+    <script>
+    var contract;
+        $(document).ready(function()
+        {
+            web3 = new Web3(window.web3.currentProvider);
+            var address = "0xfE3ceF6EaB5F02B63Be072BB75db6eAcFF7ae5b8";
+            var abi = [
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "number",
+				"type": "string"
+			},
+			{
+				"internalType": "int256",
+				"name": "amount",
+				"type": "int256"
+			}
+		],
+		"name": "addDonor",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "int256",
+				"name": "id",
+				"type": "int256"
+			}
+		],
+		"name": "getDonor",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "int256",
+				"name": "",
+				"type": "int256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getTotalCollection",
+		"outputs": [
+			{
+				"internalType": "int256",
+				"name": "",
+				"type": "int256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "totalno",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+];
+			
+            contract = new web3.eth.Contract(abi, address); 
+            contract.methods.totalno().call().then(function(totalr)
+                {
+                     $('#totalrecord').html(totalr);
+                })
+            $('#records').click(function()
+			{
+                var amt = 0; 
+				amt = parseInt($('#id').val()); 
+                amt = amt - 1;
+                contract.methods.getDonor(amt).call().then(function(name)
+                {
+                     $('#name').html(name[0]);
+                     $('#number').html(name[1]);
+                     $('#amount').html(name[2]);
+                })
+            
+            })
+        })
+    </script>
+
+</body>
+</html>
